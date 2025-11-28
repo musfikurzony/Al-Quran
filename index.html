@@ -1,1299 +1,1526 @@
 <!DOCTYPE html>
 <html lang="bn">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Al-Qur'an • Word-by-Word (Bangla)</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      :root {
-        --bg-main: #020617;
-        --bg-card: rgba(15, 23, 42, 0.92);
-        --bg-card-soft: rgba(15, 23, 42, 0.8);
-        --border-soft: rgba(30, 64, 175, 0.7);
-        --accent-soft: rgba(96, 165, 250, 0.4);
-        --accent-strong: #38bdf8;
-        --accent-strong-2: #a855f7;
-        --text-main: #e5e7eb;
-        --text-soft: #9ca3af;
-        --text-muted: #6b7280;
-        --danger: #f97373;
-        --radius-lg: 1rem;
-        --radius-xl: 1.4rem;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <title>AL-QUR'AN • Word by Word • বাংলা সহ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+  <!-- Basic styles -->
+  <style>
+    :root {
+      --bg-main: #0b1120;
+      --bg-panel: #111827;
+      --bg-surface: #020617;
+      --bg-surface-soft: #0f172a;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.08);
+      --accent-strong: rgba(34, 197, 94, 0.2);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-soft: #1f2937;
+      --border-strong: #22c55e;
+      --danger: #fb7185;
+    }
 
-      body {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-        background: radial-gradient(circle at top, #020617, #000);
-        color: var(--text-main);
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        padding: 16px;
-      }
+    * {
+      box-sizing: border-box;
+    }
 
-      .app-shell {
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 50%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Top App Bar */
+    .app-bar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to right, rgba(15, 23, 42, 0.88), rgba(8, 47, 35, 0.92));
+      border-bottom: 1px solid rgba(15, 118, 110, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .app-bar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .app-title {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.95rem;
+    }
+
+    .app-title-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #a7f3d0, #22c55e 40%, #064e3b 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.7), 0 10px 25px rgba(16, 185, 129, 0.45);
+    }
+
+    .app-title-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.05rem;
+    }
+
+    .app-title-main {
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-size: 0.9rem;
+    }
+
+    .app-title-sub {
+      font-size: 0.75rem;
+      color: #a5b4fc;
+    }
+
+    .app-current-surah {
+      flex: 1;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .app-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .icon-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+      padding: 0.35rem 0.55rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      color: #e5e7eb;
+    }
+
+    .icon-btn span.icon {
+      font-size: 1rem;
+    }
+
+    .icon-btn-primary {
+      border-color: rgba(34, 197, 94, 0.7);
+      background: radial-gradient(circle at top, rgba(16, 185, 129, 0.2), rgba(4, 47, 46, 0.9));
+      box-shadow: 0 0 0 1px rgba(45, 212, 191, 0.6), 0 10px 25px rgba(34, 197, 94, 0.4);
+    }
+
+    .icon-btn-primary:hover {
+      background: radial-gradient(circle at top, rgba(22, 163, 74, 0.4), rgba(2, 44, 34, 0.95));
+    }
+
+    /* Layout */
+    .app-main {
+      flex: 1;
+      max-width: 1100px;
+      margin: 0.75rem auto 1.25rem;
+      padding: 0 0.75rem 1.5rem;
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(260px, 1.4fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 840px) {
+      .app-main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* Panels */
+    .panel {
+      border-radius: 1.25rem;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
+      border: 1px solid rgba(30, 64, 175, 0.5);
+      box-shadow:
+        0 18px 50px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(15, 23, 42, 0.8);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .panel-header {
+      padding: 0.8rem 1rem 0.5rem;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .panel-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-title-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #a5b4fc, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.6);
+    }
+
+    .panel-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .panel-body {
+      padding: 0.7rem 0.7rem 0.9rem;
+      max-height: calc(100vh - 140px);
+      overflow: auto;
+      scroll-behavior: smooth;
+    }
+
+    @media (max-width: 840px) {
+      .panel-body {
+        max-height: none;
+      }
+    }
+
+    /* Surah Selector / Controls */
+    .selector-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.15rem 0.6rem;
+      border-bottom: 1px dashed rgba(31, 41, 55, 0.9);
+      margin: 0 0.5rem 0.4rem;
+    }
+
+    .selector-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .selector-label span.icon {
+      font-size: 1rem;
+    }
+
+    .selector-control {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .select-surah {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.98));
+      padding: 0.35rem 0.8rem;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      appearance: none;
+      position: relative;
+    }
+
+    .select-surah:focus {
+      outline: none;
+      border-color: rgba(34, 197, 94, 0.9);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
+    }
+
+    .mode-tabs {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0.15rem;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.95));
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.85);
+    }
+
+    .mode-tab {
+      border-radius: 999px;
+      border: none;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+    }
+
+    .mode-tab span.icon {
+      font-size: 0.9rem;
+    }
+
+    .mode-tab.active {
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.3), rgba(5, 46, 22, 0.95));
+      color: #ecfdf5;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.8);
+    }
+
+    .mode-tab:not(.active):hover {
+      background: rgba(30, 64, 175, 0.35);
+      color: #e5e7eb;
+    }
+
+    @media (max-width: 640px) {
+      .mode-tabs {
         width: 100%;
-        max-width: 1280px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      header.app-header {
-        background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.3), transparent 55%),
-                    radial-gradient(circle at top right, rgba(236, 72, 153, 0.25), transparent 55%),
-                    linear-gradient(135deg, #020617, #020617);
-        border-radius: 1.2rem;
-        padding: 10px 14px;
-        border: 1px solid rgba(51, 65, 85, 0.9);
-        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.8);
-        display: flex;
-        align-items: center;
         justify-content: space-between;
-        gap: 8px;
       }
 
-      .header-main-title {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .header-main-title h1 {
-        font-size: 1.1rem;
-        letter-spacing: 0.05em;
-      }
-
-      .header-main-title .subtitle {
-        font-size: 0.8rem;
-        color: var(--text-soft);
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .pill-badge {
-        font-size: 0.75rem;
-        padding: 2px 8px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.7);
-        color: var(--text-soft);
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-      }
-
-      .pill-badge span {
-        font-size: 0.95em;
-      }
-
-      .layout-main {
-        display: grid;
-        grid-template-columns: minmax(0, 2.05fr) minmax(0, 1.4fr);
-        gap: 10px;
-      }
-
-      .panel {
-        background: var(--bg-card);
-        border-radius: var(--radius-xl);
-        border: 1px solid rgba(30, 64, 175, 0.6);
-        padding: 10px;
-        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.85);
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .panel-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 6px;
-        padding-bottom: 4px;
-        border-bottom: 1px solid rgba(30, 64, 175, 0.45);
-      }
-
-      .panel-title-group {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .panel-title-group h2 {
-        font-size: 0.95rem;
-      }
-
-      .panel-title-group .panel-subtitle {
-        font-size: 0.75rem;
-        color: var(--text-soft);
-      }
-
-      .panel-header-right {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .badge-soft {
-        font-size: 0.7rem;
-        padding: 2px 6px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.8);
-        border: 1px solid rgba(148, 163, 184, 0.75);
-        color: var(--text-soft);
-      }
-
-      .btn-ghost {
-        font-size: 0.8rem;
-        padding: 3px 8px;
-        border-radius: 999px;
-        border: 1px solid rgba(51, 65, 85, 0.9);
-        background: radial-gradient(circle at top, rgba(30, 64, 175, 0.5), rgba(15, 23, 42, 0.95));
-        color: #e5e7eb;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-      }
-
-      .btn-ghost span.icon {
-        font-size: 0.9em;
-      }
-
-      .btn-ghost:hover {
-        border-color: rgba(59, 130, 246, 0.9);
-        box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.35);
-      }
-
-      .mode-toggle {
-        display: inline-flex;
-        padding: 3px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(30, 64, 175, 0.7);
-        gap: 3px;
-      }
-
-      .mode-toggle button {
-        border: none;
-        font-size: 0.76rem;
-        padding: 3px 9px;
-        border-radius: 999px;
-        cursor: pointer;
-        background: transparent;
-        color: var(--text-soft);
-      }
-
-      .mode-toggle button.active {
-        background: linear-gradient(135deg, #38bdf8, #4f46e5);
-        color: #0b1120;
-        font-weight: 600;
-      }
-
-      .settings-panel {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        background: radial-gradient(circle at top, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.96));
-        padding: 6px 8px;
-        border-radius: 0.9rem;
-        border: 1px solid rgba(30, 64, 175, 0.7);
-      }
-
-      .settings-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-        align-items: center;
-      }
-
-      .settings-label {
-        font-size: 0.75rem;
-        color: var(--text-soft);
-      }
-
-      .segmented-control {
-        display: inline-flex;
-        border-radius: 999px;
-        border: 1px solid rgba(55, 65, 81, 0.9);
-        overflow: hidden;
-        background: rgba(17, 24, 39, 0.9);
-      }
-
-      .segmented-control button {
-        border: none;
-        padding: 2px 8px;
-        font-size: 0.75rem;
-        cursor: pointer;
-        background: transparent;
-        color: var(--text-soft);
-      }
-
-      .segmented-control button.active {
-        background: rgba(30, 64, 175, 0.95);
-        color: var(--text-main);
-      }
-
-      .checkbox-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 0.78rem;
-        padding: 2px 7px;
-        border-radius: 999px;
-        border: 1px solid rgba(55, 65, 81, 0.9);
-        background: rgba(15, 23, 42, 0.9);
-        color: var(--text-soft);
-        cursor: pointer;
-      }
-
-      .checkbox-chip input {
-        accent-color: #38bdf8;
-      }
-
-      .reader-container {
-        margin-top: 6px;
-        background: rgba(15, 23, 42, 0.96);
-        border-radius: 0.9rem;
-        border: 1px solid rgba(30, 64, 175, 0.5);
-        padding: 8px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        max-height: calc(100vh - 240px);
-        overflow-y: auto;
-      }
-
-      .bismillah-block {
-        text-align: center;
-        margin-bottom: 4px;
-        padding-bottom: 4px;
-        border-bottom: 1px dashed rgba(51, 65, 85, 0.9);
-      }
-
-      .bismillah-ar {
-        font-family: "Scheherazade New", "Amiri", system-ui;
-        font-size: 1.2rem;
-        direction: rtl;
-        margin-bottom: 2px;
-      }
-
-      .bismillah-bn {
-        font-size: 0.8rem;
-        color: var(--text-soft);
-      }
-
-      .bismillah-trans {
-        margin-top: 3px;
-        font-size: 0.78rem;
-        color: var(--text-main);
-        text-align: left;
-      }
-
-      .bismillah-trans span.label {
-        color: var(--accent-strong);
-        font-size: 0.76rem;
-        margin-right: 4px;
-      }
-
-      .ayah-block {
-        padding: 6px 7px;
-        margin-bottom: 4px;
-        border-radius: 0.75rem;
-        background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.18), transparent 55%),
-                    radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.18), transparent 60%),
-                    rgba(15, 23, 42, 0.96);
-        border: 1px solid rgba(30, 64, 175, 0.7);
-      }
-
-      .ayah-meta-line {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 0.72rem;
-        color: var(--text-soft);
-        margin-bottom: 3px;
-      }
-
-      .ayah-arabic {
-        font-family: "Scheherazade New", "Amiri", system-ui;
-        direction: rtl;
-        font-size: 1.2rem;
-        line-height: 2.2;
-        text-align: right;
-      }
-
-      .word-token {
-        display: inline-block;
-        padding: 1px 4px;
-        margin: 0 1px;
-        border-radius: 0.55rem;
-        cursor: pointer;
-        transition: all 0.13s ease-out;
-      }
-
-      .word-token:hover {
-        background: rgba(37, 99, 235, 0.23);
-        box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.5);
-      }
-
-      .word-token.active {
-        background: radial-gradient(circle at top, rgba(59, 130, 246, 0.95), rgba(37, 99, 235, 0.9));
-        color: #0b1120;
-        box-shadow: 0 0 0 1px rgba(191, 219, 254, 0.95), 0 10px 20px rgba(15, 23, 42, 0.9);
-      }
-
-      .ayah-translation-block {
-        margin-top: 4px;
-        padding-top: 3px;
-        border-top: 1px dashed rgba(55, 65, 81, 0.9);
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-      }
-
-      .ayah-translation-line {
-        font-size: 0.82rem;
-        line-height: 1.7;
-      }
-
-      .ayah-translation-label {
-        font-size: 0.75rem;
-        color: var(--accent-strong);
-        margin-right: 4px;
-      }
-
-      .detail-panel-inner {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        height: 100%;
-      }
-
-      .detail-header {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-
-      .detail-title {
-        font-size: 0.9rem;
-      }
-
-      .detail-subtitle {
-        font-size: 0.76rem;
-        color: var(--text-soft);
-      }
-
-      .detail-segments {
-        display: flex;
-        gap: 4px;
-      }
-
-      .detail-body {
+      .mode-tab {
         flex: 1;
-        background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
-        border-radius: 0.9rem;
-        border: 1px solid rgba(30, 64, 175, 0.7);
-        padding: 8px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        min-height: 180px;
-      }
-
-      .detail-placeholder {
-        font-size: 0.8rem;
-        color: var(--text-soft);
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-      }
-
-      .detail-word-ar {
-        font-family: "Scheherazade New", "Amiri", system-ui;
-        font-size: 1.3rem;
-        direction: rtl;
-        text-align: right;
-      }
-
-      .detail-meaning {
-        font-size: 0.9rem;
-        line-height: 1.7;
-      }
-
-      .detail-grammer-title {
-        font-size: 0.8rem;
-        color: var(--accent-strong);
-      }
-
-      .detail-grammer-text {
-        font-size: 0.82rem;
-        color: var(--text-main);
-        line-height: 1.7;
-        white-space: pre-wrap;
-        border-top: 1px dashed rgba(75, 85, 99, 0.8);
-        padding-top: 4px;
-      }
-
-      .detail-footer {
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 4px;
-      }
-
-      .back-home-link {
-        font-size: 0.78rem;
-        color: var(--accent-strong);
-        cursor: pointer;
-        text-decoration: underline dashed;
-      }
-
-      .sura-list {
-        margin-top: 4px;
-        background: rgba(15, 23, 42, 0.96);
-        border-radius: 0.9rem;
-        border: 1px solid rgba(30, 64, 175, 0.55);
-        padding: 8px;
-        max-height: calc(100vh - 230px);
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .sura-list-item {
-        border-radius: 0.75rem;
-        border: 1px solid rgba(31, 41, 55, 0.9);
-        padding: 6px 7px;
-        background: linear-gradient(120deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 6px;
-        transition: all 0.15s ease-out;
-      }
-
-      .sura-list-item:hover {
-        border-color: rgba(59, 130, 246, 0.9);
-        box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
-        transform: translateY(-1px);
-      }
-
-      .sura-list-item.active {
-        border-color: rgba(96, 165, 250, 0.9);
-        background: radial-gradient(circle at top left, rgba(37, 99, 235, 0.35), transparent 55%),
-                    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.35), transparent 65%),
-                    rgba(15, 23, 42, 0.98);
-      }
-
-      .sura-list-main {
-        display: flex;
-        flex-direction: column;
-        gap: 1px;
-      }
-
-      .sura-list-title-line {
-        font-size: 0.86rem;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-      }
-
-      .sura-num-pill {
-        font-size: 0.72rem;
-        padding: 1px 6px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(55, 65, 81, 0.9);
-        color: var(--text-soft);
-      }
-
-      .sura-name-bn {
-        font-weight: 500;
-      }
-
-      .sura-name-ar {
-        font-family: "Scheherazade New", "Amiri", system-ui;
-        direction: rtl;
-        font-size: 0.9rem;
-      }
-
-      .sura-list-meta {
-        font-size: 0.72rem;
-        color: var(--text-muted);
-      }
-
-      .sura-list-right {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 2px;
-      }
-
-      .sura-type-chip {
-        font-size: 0.7rem;
-        padding: 1px 6px;
-        border-radius: 999px;
-        border: 1px solid rgba(55, 65, 81, 0.9);
-        color: var(--text-soft);
-      }
-
-      .sura-ayah-count {
-        font-size: 0.72rem;
-        color: var(--text-muted);
-      }
-
-      footer.app-footer {
-        margin-top: 6px;
-        font-size: 0.7rem;
-        color: var(--text-muted);
-        display: flex;
-        justify-content: space-between;
-        gap: 6px;
-      }
-
-      @media (max-width: 900px) {
-        body {
-          padding: 10px;
-        }
-
-        header.app-header {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-
-        .layout-main {
-          grid-template-columns: minmax(0, 1fr);
-        }
-
-        .reader-container {
-          max-height: none;
-        }
-
-        .sura-list {
-          max-height: none;
-        }
-      }
-
-      /* MOBILE WORD DETAIL MODAL */
-      .word-modal-backdrop {
-        position: fixed;
-        inset: 0;
-        background: rgba(15, 23, 42, 0.78);
-        display: none;
-        align-items: center;
         justify-content: center;
-        z-index: 50;
-        padding: 0.75rem;
       }
+    }
 
-      .word-modal {
-        width: 100%;
-        max-width: 520px;
-        max-height: 80vh;
-        background: radial-gradient(circle at top, rgba(56, 189, 248, 0.18), transparent 55%),
-                    radial-gradient(circle at bottom, rgba(129, 140, 248, 0.18), transparent 60%),
-                    rgba(15, 23, 42, 0.98);
-        border-radius: 1.1rem;
-        border: 1px solid rgba(148, 163, 184, 0.8);
-        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
+    /* Ayah Display */
+    .surah-meta {
+      padding: 0.4rem 0.2rem 0.2rem;
+      margin: 0 0.4rem 0.4rem;
+      border-radius: 0.75rem;
+      background: linear-gradient(to right, rgba(15, 23, 42, 0.95), rgba(22, 163, 74, 0.20));
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+    }
 
-      .word-modal-header {
-        padding: 0.4rem 0.75rem;
-        border-bottom: 1px solid rgba(51, 65, 85, 0.8);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0.5rem;
-      }
+    .surah-meta-main {
+      flex: 1;
+      min-width: 120px;
+    }
 
-      .word-modal-title {
-        font-size: 0.8rem;
-        color: #e5e7eb;
-      }
+    .surah-meta-main .name-ar {
+      font-family: "Scheherazade New", "Amiri", serif;
+      font-size: 1.05rem;
+    }
 
-      .word-modal-close {
-        border: none;
-        border-radius: 999px;
-        padding: 0.2rem 0.6rem;
-        font-size: 0.8rem;
-        background: rgba(30, 64, 175, 0.75);
-        color: #e5e7eb;
-        cursor: pointer;
-      }
+    .surah-meta-main .name-bn {
+      font-size: 0.8rem;
+      color: #e5e7eb;
+    }
 
+    .surah-meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 0.72rem;
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.95);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .pill-accent {
+      border-color: rgba(34, 197, 94, 0.8);
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.2), rgba(5, 46, 22, 0.95));
+    }
+
+    .pill span.icon {
+      font-size: 0.9rem;
+    }
+
+    /* Bismillah */
+    .bismillah-block {
+      text-align: center;
+      padding: 0.6rem 0.3rem 0.45rem;
+      margin: 0 0.4rem 0.3rem;
+      border-radius: 0.9rem;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.99));
+      border: 1px dashed rgba(55, 65, 81, 0.9);
+    }
+
+    .bismillah-ar {
+      font-family: "Scheherazade New", "Amiri", serif;
+      font-size: 1.2rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .bismillah-bn {
+      font-size: 0.8rem;
+      color: var(--text-main);
+      margin-bottom: 0.25rem;
+    }
+
+    .bismillah-trans {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .bismillah-trans div {
+      margin-top: 0.18rem;
+    }
+
+    /* Ayah Cards */
+    .ayah-card {
+      margin: 0.4rem 0.4rem 0.2rem;
+      padding: 0.6rem 0.6rem 0.55rem;
+      border-radius: 0.85rem;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ayah-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.085), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .ayah-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.35rem;
+    }
+
+    .ayah-number {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #e5e7eb;
+    }
+
+    .ayah-meta {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .ayah-text-ar {
+      font-family: "Scheherazade New", "Amiri", serif;
+      font-size: 1.05rem;
+      line-height: 2.0;
+      direction: rtl;
+      text-align: right;
+      margin-top: 0.2rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .ayah-text-bn {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      margin-top: 0.25rem;
+      color: var(--text-main);
+    }
+
+    .ayah-translations {
+      margin-top: 0.25rem;
+      padding-top: 0.25rem;
+      border-top: 1px dashed rgba(31, 41, 55, 0.95);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .ayah-translations div + div {
+      margin-top: 0.18rem;
+    }
+
+    .ayah-trans-label {
+      font-size: 0.74rem;
+      color: #a5b4fc;
+      margin-right: 0.35rem;
+    }
+
+    /* Word-by-word Arabic tokens */
+    .word-token {
+      display: inline-block;
+      padding: 0.05rem 0.35rem;
+      margin: 0.10rem 0.12rem;
+      border-radius: 0.9rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 1.0rem;
+      transition: background 0.12s ease, transform 0.05s ease, border-color 0.12s ease;
+    }
+
+    .word-token:hover {
+      background: rgba(34, 197, 94, 0.15);
+      border-color: rgba(34, 197, 94, 0.7);
+      transform: translateY(-1px);
+    }
+
+    .word-token.active {
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.35), rgba(5, 46, 22, 0.95));
+      border-color: rgba(34, 197, 94, 0.95);
+      color: #ecfdf5;
+      box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.9);
+    }
+
+    /* Word Modal (center popup) */
+    .word-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(7px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+    }
+
+    .word-modal {
+      width: min(480px, 92vw);
+      max-height: 70vh;
+      border-radius: 1rem;
+      background: radial-gradient(circle at top left, #020617, #020617 40%, #020617 100%);
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      box-shadow:
+        0 22px 55px rgba(0, 0, 0, 0.85),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      padding: 0.75rem 0.85rem 0.85rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .word-modal::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.18), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .word-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .word-modal-mainlabel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .word-modal-mainlabel .arabic {
+      font-family: "Scheherazade New", "Amiri", serif;
+      font-size: 1.1rem;
+      text-align: right;
+    }
+
+    .word-modal-mainlabel .ayah-ref {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      text-align: left;
+    }
+
+    .word-modal-close {
+      border-radius: 999px;
+      border: 1px solid rgba(75, 85, 99, 0.95);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 1));
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      color: #9ca3af;
+    }
+
+    .word-modal-close:hover {
+      border-color: rgba(248, 113, 113, 0.9);
+      color: #fecaca;
+    }
+
+    .word-modal-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr);
+      gap: 0.6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 600px) {
       .word-modal-body {
-        padding: 0.6rem 0.7rem 0.7rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        overflow-y: auto;
+        grid-template-columns: minmax(0, 1fr);
       }
+    }
 
-      .word-modal-section-title {
-        font-size: 0.75rem;
-        color: #a5b4fc;
-        margin-bottom: 0.1rem;
-        font-weight: 600;
-      }
+    .word-modal-section {
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(17, 24, 39, 1));
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      font-size: 0.8rem;
+    }
 
-      .word-modal-word {
-        font-size: 1.1rem;
-        margin-bottom: 0.1rem;
-        color: #e5e7eb;
-        direction: rtl;
-        text-align: right;
-        font-family: "Scheherazade New", "Amiri", system-ui;
-      }
+    .word-modal-section h4 {
+      margin: 0 0 0.3rem;
+      font-size: 0.75rem;
+      color: #a5b4fc;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
 
-      .word-modal-meaning {
-        font-size: 0.9rem;
-        color: #e5e7eb;
-        line-height: 1.7;
-      }
+    .word-modal-section h4 span.icon {
+      font-size: 0.85rem;
+    }
 
-      .word-modal-grammar {
-        font-size: 0.85rem;
-        color: #e5e7eb;
-        line-height: 1.7;
-        white-space: pre-wrap;
-        border-top: 1px dashed rgba(75, 85, 99, 0.7);
-        padding-top: 0.35rem;
-        margin-top: 0.2rem;
-      }
+    .word-modal-meaning-text {
+      font-size: 0.82rem;
+      color: #e5e7eb;
+      line-height: 1.6;
+    }
 
-      @media (min-width: 901px) {
-        .word-modal-backdrop {
-          display: none !important;
-        }
+    .word-modal-notes {
+      max-height: 32vh;
+      overflow: auto;
+      font-size: 0.78rem;
+      color: #e5e7eb;
+      line-height: 1.6;
+      padding-right: 0.35rem;
+    }
+
+    /* Sidebar: Surah list & Settings */
+    .sidebar-section {
+      padding: 0.55rem 0.65rem 0.7rem;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.95);
+    }
+
+    .sidebar-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .sidebar-title span.icon {
+      font-size: 1rem;
+    }
+
+    .surah-list {
+      max-height: 260px;
+      overflow: auto;
+      padding-right: 0.2rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.25rem;
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 840px) {
+      .surah-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
-    </style>
-  </head>
-  <body>
-    <div class="app-shell">
-      <header class="app-header">
-        <div class="header-main-title">
-          <h1>AL-QUR'AN</h1>
-          <div class="subtitle">Word-by-Word • বাংলা অনুবাদ ও ব্যাকরণ নোটসহ</div>
+    }
+
+    @media (max-width: 640px) {
+      .surah-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .surah-chip {
+      border-radius: 999px;
+      padding: 0.18rem 0.45rem;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.98));
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .surah-chip-number {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .surah-chip-name {
+      font-size: 0.78rem;
+      color: #e5e7eb;
+    }
+
+    .surah-chip.active {
+      border-color: rgba(34, 197, 94, 0.95);
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.35), rgba(5, 46, 22, 0.95));
+      color: #ecfdf5;
+    }
+
+    .surah-chip:hover {
+      border-color: rgba(59, 130, 246, 0.9);
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 640px) {
+      .settings-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .settings-field {
+      border-radius: 0.75rem;
+      padding: 0.4rem 0.5rem;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 1));
+      border: 1px solid rgba(31, 41, 55, 0.95);
+    }
+
+    .settings-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .settings-input {
+      width: 100%;
+      font-size: 0.8rem;
+      padding: 0.25rem 0.4rem;
+      border-radius: 0.45rem;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 1);
+      color: var(--text-main);
+    }
+
+    .settings-input:focus {
+      outline: none;
+      border-color: rgba(34, 197, 94, 0.85);
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      accent-color: #22c55e;
+    }
+
+    .writer-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.78rem;
+    }
+
+    .writer-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .writer-item input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      accent-color: #22c55e;
+    }
+
+    .writer-name {
+      color: #e5e7eb;
+    }
+
+    .writer-note {
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
+    /* Bottom bar for mobile (quick controls) */
+    .bottom-bar {
+      position: sticky;
+      bottom: 0;
+      z-index: 35;
+      padding: 0.35rem 0.65rem 0.5rem;
+      background: linear-gradient(to top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
+      border-top: 1px solid rgba(31, 41, 55, 0.95);
+      display: none;
+    }
+
+    .bottom-bar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .bottom-bar-btn {
+      flex: 1;
+      border-radius: 999px;
+      padding: 0.35rem 0.4rem;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 1));
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      color: #e5e7eb;
+    }
+
+    .bottom-bar-btn span.icon {
+      font-size: 0.9rem;
+    }
+
+    .bottom-bar-btn-primary {
+      border-color: rgba(34, 197, 94, 0.85);
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.32), rgba(5, 46, 22, 0.95));
+    }
+
+    @media (max-width: 840px) {
+      .bottom-bar {
+        display: block;
+      }
+    }
+
+    /* Info panel */
+    .info-block {
+      padding: 0.45rem 0.55rem 0.5rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .info-block strong {
+      color: #e5e7eb;
+    }
+
+  </style>
+
+  <script src="suras.js"></script>
+</head>
+<body>
+  <!-- Word Modal -->
+  <div id="wordModalBackdrop" class="word-modal-backdrop">
+    <div class="word-modal">
+      <div class="word-modal-header">
+        <div class="word-modal-mainlabel">
+          <div id="wordModalArabic" class="arabic"></div>
+          <div id="wordModalAyahRef" class="ayah-ref"></div>
         </div>
-        <div class="header-actions">
-          <div class="pill-badge">
-            <span>📖</span>
-            <span>বেটা রিডার</span>
-          </div>
-          <div class="pill-badge">
-            <span>🧠</span>
-            <span>শব্দে–শব্দে ব্যাকরণ সহ</span>
-          </div>
+        <button id="wordModalClose" class="word-modal-close" aria-label="Close">
+          ✕
+        </button>
+      </div>
+      <div class="word-modal-body">
+        <div class="word-modal-section">
+          <h4>
+            <span class="icon">🔤</span>
+            বাংলা শব্দার্থ
+          </h4>
+          <div id="wordModalMeaning" class="word-modal-meaning-text"></div>
         </div>
-      </header>
-
-      <main class="layout-main">
-        <section class="panel">
-          <div class="panel-header">
-            <div class="panel-title-group">
-              <h2 id="readerPanelTitle">কুরআন রিডার</h2>
-              <div class="panel-subtitle" id="readerPanelSubtitle">
-                সূরা নির্বাচন করুন, তারপর মোড বেছে নিন — শুধু অনুবাদ / শব্দে–শব্দে
-              </div>
-            </div>
-            <div class="panel-header-right">
-              <span class="badge-soft" id="currentSuraInfo">
-                কোনো সূরা নির্বাচন করা হয়নি
-              </span>
-            </div>
-          </div>
-
-          <div class="settings-panel">
-            <div class="settings-group">
-              <div class="settings-label">মোড</div>
-              <div class="mode-toggle">
-                <button id="modeSimpleBtn" class="active" data-mode="simple">
-                  শুধু অনুবাদ
-                </button>
-                <button id="modeWordByWordBtn" data-mode="word">
-                  শব্দে–শব্দে
-                </button>
-              </div>
-            </div>
-
-            <div class="settings-group">
-              <div class="settings-label">অনুবাদক</div>
-              <label class="checkbox-chip">
-                <input type="checkbox" id="chkOsmani" checked />
-                <span>তাফসীরে ওসমানী</span>
-              </label>
-              <label class="checkbox-chip">
-                <input type="checkbox" id="chkTawjih" checked />
-                <span>তাওযীহুল কুরআন</span>
-              </label>
-            </div>
-
-            <div class="settings-group">
-              <div class="settings-label">ফন্ট সাইজ</div>
-              <div class="segmented-control">
-                <button id="fontArabicSmall">ছোট</button>
-                <button id="fontArabicMedium" class="active">মাঝারি</button>
-                <button id="fontArabicLarge">বড়</button>
-              </div>
-              <span class="settings-label" style="margin-left: 6px;">আরবি</span>
-            </div>
-
-            <div class="settings-group">
-              <div class="segmented-control">
-                <button id="fontBanglaSmall">ছোট</button>
-                <button id="fontBanglaMedium" class="active">মাঝারি</button>
-                <button id="fontBanglaLarge">বড়</button>
-              </div>
-              <span class="settings-label" style="margin-left: 6px;">বাংলা</span>
-            </div>
-          </div>
-
-          <div class="reader-container" id="readerContainer">
-            <div class="detail-placeholder" id="initialPlaceholder">
-              <div>📖 শুরু করুন...</div>
-              <div>ডান পাশের তালিকা থেকে একটি সূরা নির্বাচন করুন।</div>
-              <div>তারপর উপরে থেকে মোড নির্বাচন করুন — শুধু অনুবাদ অথবা শব্দে–শব্দে।</div>
-            </div>
-          </div>
-        </section>
-
-        <aside class="panel">
-          <div class="panel-header">
-            <div class="panel-title-group">
-              <h2>📚 সূরার তালিকা</h2>
-              <div class="panel-subtitle">১–১১৪ পর্যন্ত সূরা — যার JSON data আছে, তা পড়া যাবে</div>
-            </div>
-            <div class="panel-header-right">
-              <span class="badge-soft">Total: <span id="suraCountBadge">0</span></span>
-            </div>
-          </div>
-
-          <div class="sura-list" id="suraList"></div>
-        </aside>
-
-        <aside class="panel">
-          <div class="detail-panel-inner">
-            <div class="detail-header">
-              <div class="detail-title">🔍 শব্দের বিশ্লেষণ</div>
-              <div class="detail-subtitle" id="detailSubtitle">
-                শব্দে–শব্দে মোড চালু করে কোনো শব্দে tap করুন
-              </div>
-              <div class="detail-segments">
-                <button class="btn-ghost" id="btnGrammarToggle">
-                  <span class="icon">📚</span>
-                  <span>ব্যাকরণ নোট দেখাও</span>
-                </button>
-              </div>
-            </div>
-
-            <div class="detail-body">
-              <div class="detail-placeholder" id="detailPlaceholder">
-                <div>⚙️ ব্যবহারবিধি</div>
-                <div>১. উপরের মোড থেকে <b>শব্দে–শব্দে</b> সিলেক্ট করুন।</div>
-                <div>২. এরপর আরবি আয়াতের যেকোনো শব্দে tap করুন।</div>
-                <div>৩. এখানে বাংলা শব্দার্থ ও ব্যাকরণ নোট দেখতে পাবেন।</div>
-              </div>
-
-              <div style="display:none;" id="detailContent">
-                <div class="detail-word-ar" id="detailWord"></div>
-                <div class="detail-meaning" id="detailMeaning"></div>
-                <div>
-                  <div class="detail-grammer-title">ব্যাকরণ নোট</div>
-                  <div class="detail-grammer-text" id="detailGrammar"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="detail-footer">
-              <div id="detailFooterInfo">মোট শব্দ: —</div>
-              <div class="back-home-link" id="backHomeLink">
-                ⬅️ অন্যান্য সূরা নির্বাচন করুন
-              </div>
-            </div>
-          </div>
-        </aside>
-      </main>
-
-      <footer class="app-footer">
-        <div>📌 নোট: ডাটা আপডেট প্রক্রিয়াধীন — ধীরে ধীরে সব সূরার জন্য word-by-word data যুক্ত হবে ইনশাআল্লাহ।</div>
-        <div>© 2025 • Qur'an Word-by-Word (Bangla)</div>
-      </footer>
-    </div>
-
-    <!-- MOBILE WORD DETAIL MODAL -->
-    <div class="word-modal-backdrop" id="wordModalBackdrop">
-      <div class="word-modal">
-        <div class="word-modal-header">
-          <div class="word-modal-title" id="wordModalTitle">
-            শব্দের বিস্তারিত
-          </div>
-          <button class="word-modal-close" id="wordModalClose">বন্ধ করুন ✕</button>
-        </div>
-        <div class="word-modal-body">
-          <div>
-            <div class="word-modal-section-title">বাংলা শব্দার্থ</div>
-            <div class="word-modal-word" id="wordModalWord"></div>
-            <div class="word-modal-meaning" id="wordModalMeaning"></div>
-          </div>
-          <div>
-            <div class="word-modal-section-title">ব্যাকরণ নোট</div>
-            <div class="word-modal-grammar" id="wordModalGrammar"></div>
-          </div>
+        <div class="word-modal-section">
+          <h4>
+            <span class="icon">📚</span>
+            ব্যাকরণ নোটস
+          </h4>
+          <div id="wordModalNotes" class="word-modal-notes"></div>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="suras.js"></script>
-    <script>
-      const readerContainer = document.getElementById("readerContainer");
-      const initialPlaceholder = document.getElementById("initialPlaceholder");
-      const readerPanelTitle = document.getElementById("readerPanelTitle");
-      const readerPanelSubtitle = document.getElementById("readerPanelSubtitle");
-      const currentSuraInfo = document.getElementById("currentSuraInfo");
-      const suraListEl = document.getElementById("suraList");
-      const suraCountBadge = document.getElementById("suraCountBadge");
+  <!-- Top App Bar -->
+  <header class="app-bar">
+    <div class="app-bar-inner">
+      <div class="app-title">
+        <div class="app-title-icon">📖</div>
+        <div class="app-title-text">
+          <div class="app-title-main">AL-QUR'AN</div>
+          <div class="app-title-sub">Word-by-Word • বাংলা সহ</div>
+        </div>
+      </div>
+      <div id="currentSurahTitle" class="app-current-surah">
+        সূরা নির্বাচন করুন — ১–১১৪ তালিকা থেকে
+      </div>
+      <div class="app-actions">
+        <button id="scrollTopBtn" class="icon-btn" type="button">
+          <span class="icon">⬆️</span>
+        </button>
+        <button id="openSettingsBtn" class="icon-btn icon-btn-primary" type="button">
+          <span class="icon">⚙️</span>
+          <span>ফন্ট & ভিউ</span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-      const modeSimpleBtn = document.getElementById("modeSimpleBtn");
-      const modeWordByWordBtn = document.getElementById("modeWordByWordBtn");
+  <!-- Main Layout -->
+  <main class="app-main">
+    <!-- Reader Panel -->
+    <section class="panel" id="readerPanel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">
+            <div class="panel-title-icon">📖</div>
+            <span>কুরআন রিডার</span>
+          </div>
+          <div class="panel-subtitle">
+            সূরা নির্বাচন করুন, তারপর শব্দে–শব্দে / শুধু অনুবাদ যে মোডে চাইবেন সেটি বেছে নিন।
+          </div>
+        </div>
+      </div>
 
-      const chkOsmani = document.getElementById("chkOsmani");
-      const chkTawjih = document.getElementById("chkTawjih");
+      <div class="panel-body">
+        <!-- Surah & Mode selectors -->
+        <div class="selector-row">
+          <div class="selector-label">
+            <span class="icon">🕋</span>
+            <span>সূরা নির্বাচন</span>
+          </div>
+          <div class="selector-control">
+            <select id="surahSelect" class="select-surah">
+              <option value="">— ১–১১৪ থেকে সূরা নির্বাচন করুন —</option>
+            </select>
+          </div>
+        </div>
 
-      const fontArabicSmall = document.getElementById("fontArabicSmall");
-      const fontArabicMedium = document.getElementById("fontArabicMedium");
-      const fontArabicLarge = document.getElementById("fontArabicLarge");
-      const fontBanglaSmall = document.getElementById("fontBanglaSmall");
-      const fontBanglaMedium = document.getElementById("fontBanglaMedium");
-      const fontBanglaLarge = document.getElementById("fontBanglaLarge");
+        <div class="selector-row" style="margin-top: 0.35rem;">
+          <div class="selector-label">
+            <span class="icon">🎛️</span>
+            <span>পড়ার মোড</span>
+          </div>
+          <div class="selector-control" style="justify-content: flex-start;">
+            <div class="mode-tabs">
+              <button class="mode-tab active" data-mode="word" id="modeWordBtn" type="button">
+                <span class="icon">🔤</span>
+                <span>শব্দে–শব্দে</span>
+              </button>
+              <button class="mode-tab" data-mode="translation" id="modeTransBtn" type="button">
+                <span class="icon">📘</span>
+                <span>শুধু অনুবাদ</span>
+              </button>
+              <button class="mode-tab" data-mode="arabic" id="modeArabicBtn" type="button">
+                <span class="icon">🕋</span>
+                <span>শুধু আরবি</span>
+              </button>
+            </div>
+          </div>
+        </div>
 
-      const detailSubtitle = document.getElementById("detailSubtitle");
-      const detailPlaceholder = document.getElementById("detailPlaceholder");
-      const detailContent = document.getElementById("detailContent");
-      const detailWord = document.getElementById("detailWord");
-      const detailMeaning = document.getElementById("detailMeaning");
-      const detailGrammar = document.getElementById("detailGrammar");
-      const detailFooterInfo = document.getElementById("detailFooterInfo");
-      const btnGrammarToggle = document.getElementById("btnGrammarToggle");
-      const backHomeLink = document.getElementById("backHomeLink");
+        <!-- Surah Content -->
+        <div id="surahContent">
+          <div class="info-block">
+            <strong>কিভাবে ব্যবহার করবেন?</strong><br />
+            উপরের তালিকা থেকে যে কোনো সূরা নির্বাচন করুন। তারপর <strong>শব্দে–শব্দে</strong> মোডে
+            গিয়ে আরবি শব্দে ট্যাপ করলে একটি সুন্দর popup–এ শব্দের বাংলা অর্থ ও ব্যাকরণ নোটস দেখতে পাবেন।
+            <br /><br />
+            <strong>শুধু অনুবাদ</strong> মোডে চাইলে একাধিক লেখক (তাফসীরে ওসমানী, তাওযীহুল কুরআন)
+            একসাথে সিলেক্ট করে তুলনা করতে পারবেন।<br />
+            সব সেটিংস (ফন্ট সাইজ, line height ইত্যাদি) ডান পাশের <strong>ফন্ট & ভিউ</strong> প্যানেল থেকে
+            নিয়ন্ত্রণ করা যাবে।
+          </div>
+        </div>
+      </div>
+    </section>
 
-      const wordModalBackdrop = document.getElementById("wordModalBackdrop");
-      const wordModalClose = document.getElementById("wordModalClose");
-      const wordModalTitle = document.getElementById("wordModalTitle");
-      const wordModalWord = document.getElementById("wordModalWord");
-      const wordModalMeaning = document.getElementById("wordModalMeaning");
-      const wordModalGrammar = document.getElementById("wordModalGrammar");
+    <!-- Sidebar Panel -->
+    <aside class="panel" id="sidebarPanel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">
+            <div class="panel-title-icon">📚</div>
+            <span>সূরার তালিকা & সেটিংস</span>
+          </div>
+          <div class="panel-subtitle">
+            ১–১১৪ পর্যন্ত সব সূরা — যার JSON data থাকবে, সেটি পড়া যাবে।
+          </div>
+        </div>
+      </div>
 
-      let currentSura = null;
-      let currentSuraData = null;
-      let currentMode = "simple";
-      let activeSuraItem = null;
-      let activeWordToken = null;
-      let grammarVisible = true;
-      let arabicFontSize = "medium";
-      let banglaFontSize = "medium";
+      <div class="panel-body">
+        <!-- Surah List -->
+        <div class="sidebar-section">
+          <div class="sidebar-title">
+            <span class="icon">🕋</span>
+            <span>সূরা ১–১১৪</span>
+          </div>
+          <div id="surahList" class="surah-list">
+            <!-- JS দিয়ে পূরণ হবে -->
+          </div>
+        </div>
 
-      function buildSuraList() {
-        suraListEl.innerHTML = "";
-        if (!window.suras || !Array.isArray(window.suras)) {
-          suraCountBadge.textContent = "0";
-          return;
-        }
-        suraCountBadge.textContent = window.suras.length.toString();
+        <!-- Settings -->
+        <div class="sidebar-section" id="settingsPanel">
+          <div class="sidebar-title">
+            <span class="icon">⚙️</span>
+            <span>ফন্ট & ভিউ সেটিং</span>
+          </div>
+          <div class="settings-grid">
+            <div class="settings-field">
+              <div class="settings-label">আরবি ফন্ট সাইজ</div>
+              <input
+                id="arabicFontSizeInput"
+                class="settings-input"
+                type="number"
+                min="16"
+                max="40"
+                value="21"
+              />
+            </div>
+            <div class="settings-field">
+              <div class="settings-label">বাংলা ফন্ট সাইজ</div>
+              <input
+                id="banglaFontSizeInput"
+                class="settings-input"
+                type="number"
+                min="12"
+                max="26"
+                value="14"
+              />
+            </div>
+            <div class="settings-field">
+              <div class="settings-label">আরবি line height</div>
+              <input
+                id="arabicLineHeightInput"
+                class="settings-input"
+                type="number"
+                min="1.4"
+                max="3"
+                step="0.1"
+                value="2.0"
+              />
+            </div>
+            <div class="settings-field">
+              <div class="settings-label">বাংলা line height</div>
+              <input
+                id="banglaLineHeightInput"
+                class="settings-input"
+                type="number"
+                min="1.2"
+                max="2.4"
+                step="0.1"
+                value="1.6"
+              />
+            </div>
+          </div>
 
-        window.suras.forEach((sura) => {
-          const item = document.createElement("div");
-          item.className = "sura-list-item";
-          item.dataset.suraNumber = sura.number;
+          <div style="margin-top: 0.6rem;">
+            <div class="settings-label">অনুবাদ লেখক নির্বাচন</div>
+            <div class="writer-list">
+              <label class="writer-item">
+                <input type="checkbox" id="writerOsmani" checked />
+                <div>
+                  <div class="writer-name">তাফসীরে ওসমানী</div>
+                  <div class="writer-note">ডিফল্ট ভাবে অন থাকে</div>
+                </div>
+              </label>
+              <label class="writer-item">
+                <input type="checkbox" id="writerTawjih" checked />
+                <div>
+                  <div class="writer-name">তাওযীহুল কুরআন</div>
+                  <div class="writer-note">মুফতি তাকী উসমানী (দা.বা.) অবলম্বনে</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
 
-          const left = document.createElement("div");
-          left.className = "sura-list-main";
+        <!-- Info -->
+        <div class="sidebar-section">
+          <div class="sidebar-title">
+            <span class="icon">ℹ️</span>
+            <span>প্রিভিউ তথ্য</span>
+          </div>
+          <div class="info-block">
+            এ টুলটি ব্যক্তিগত শিক্ষা ও তাদাব্বুরের জন্য নির্মিত একটি
+            <strong>প্রাইভেট স্টাডি প্রজেক্ট</strong> — এখানে যোগ হওয়া প্রতিটি সূরার JSON data ম্যানুয়ালি
+            যাচাই করে আপলোড করা হবে ইনশাআল্লাহ, যেন শব্দে–শব্দে গ্রামার নোটসও সঠিক থাকে।
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
 
-          const titleLine = document.createElement("div");
-          titleLine.className = "sura-list-title-line";
+  <!-- Bottom Bar (mobile quick controls) -->
+  <div class="bottom-bar">
+    <div class="bottom-bar-inner">
+      <button id="bottomSurahBtn" class="bottom-bar-btn" type="button">
+        <span class="icon">🕋</span>
+        <span>সূরা</span>
+      </button>
+      <button id="bottomWordBtn" class="bottom-bar-btn bottom-bar-btn-primary" type="button">
+        <span class="icon">🔤</span>
+        <span>শব্দে–শব্দে</span>
+      </button>
+      <button id="bottomTransBtn" class="bottom-bar-btn" type="button">
+        <span class="icon">📘</span>
+        <span>অনুবাদ</span>
+      </button>
+      <button id="bottomSettingsBtn" class="bottom-bar-btn" type="button">
+        <span class="icon">⚙️</span>
+      </button>
+    </div>
+  </div>
 
-          const numPill = document.createElement("span");
-          numPill.className = "sura-num-pill";
-          numPill.textContent = sura.number.toString();
+  <!-- Core Script -->
+  <script>
+    // ===== Global State =====
+    const surahSelect = document.getElementById("surahSelect");
+    const surahList = document.getElementById("surahList");
+    const surahContent = document.getElementById("surahContent");
+    const currentSurahTitle = document.getElementById("currentSurahTitle");
 
-          const bnName = document.createElement("span");
-          bnName.className = "sura-name-bn";
-          bnName.textContent = sura.nameBn;
+    const modeWordBtn = document.getElementById("modeWordBtn");
+    const modeTransBtn = document.getElementById("modeTransBtn");
+    const modeArabicBtn = document.getElementById("modeArabicBtn");
+    const modeButtons = [modeWordBtn, modeTransBtn, modeArabicBtn];
 
-          titleLine.appendChild(numPill);
-          titleLine.appendChild(bnName);
+    const writerOsmani = document.getElementById("writerOsmani");
+    const writerTawjih = document.getElementById("writerTawjih");
 
-          const arName = document.createElement("div");
-          arName.className = "sura-name-ar";
-          arName.textContent = sura.nameAr;
+    const arabicFontSizeInput = document.getElementById("arabicFontSizeInput");
+    const banglaFontSizeInput = document.getElementById("banglaFontSizeInput");
+    const arabicLineHeightInput = document.getElementById("arabicLineHeightInput");
+    const banglaLineHeightInput = document.getElementById("banglaLineHeightInput");
 
-          const meta = document.createElement("div");
-          meta.className = "sura-list-meta";
-          meta.textContent = `${sura.type === "Makki" ? "মাক্কী" : "মাদানী"} • আয়াত ${sura.ayahCount}`;
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+    const openSettingsBtn = document.getElementById("openSettingsBtn");
+    const settingsPanel = document.getElementById("settingsPanel");
 
-          left.appendChild(titleLine);
-          left.appendChild(arName);
-          left.appendChild(meta);
+    const bottomSurahBtn = document.getElementById("bottomSurahBtn");
+    const bottomWordBtn = document.getElementById("bottomWordBtn");
+    const bottomTransBtn = document.getElementById("bottomTransBtn");
+    const bottomSettingsBtn = document.getElementById("bottomSettingsBtn");
 
-          const right = document.createElement("div");
-          right.className = "sura-list-right";
+    // Word Modal
+    const wordModalBackdrop = document.getElementById("wordModalBackdrop");
+    const wordModalClose = document.getElementById("wordModalClose");
+    const wordModalArabic = document.getElementById("wordModalArabic");
+    const wordModalAyahRef = document.getElementById("wordModalAyahRef");
+    const wordModalMeaning = document.getElementById("wordModalMeaning");
+    const wordModalNotes = document.getElementById("wordModalNotes");
 
-          const typeChip = document.createElement("span");
-          typeChip.className = "sura-type-chip";
-          typeChip.textContent = sura.type === "Makki" ? "মাক্কী" : "মাদানী";
+    let currentMode = "word"; // "word" | "translation" | "arabic"
+    let currentSurah = null; // will store loaded JSON
 
-          const countLine = document.createElement("span");
-          countLine.className = "sura-ayah-count";
-          countLine.textContent = `${sura.ayahCount} আয়াত`;
+    // ===== Helpers =====
 
-          right.appendChild(typeChip);
-          right.appendChild(countLine);
+    function setMode(mode) {
+      currentMode = mode;
+      modeButtons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.mode === mode);
+      });
 
-          item.appendChild(left);
-          item.appendChild(right);
+      // bottom bar sync
+      bottomWordBtn.classList.toggle("bottom-bar-btn-primary", mode === "word");
+      bottomTransBtn.classList.toggle("bottom-bar-btn-primary", mode === "translation");
+      renderCurrentSurah();
+    }
 
-          item.addEventListener("click", () => {
-            selectSura(sura, item);
-          });
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-          suraListEl.appendChild(item);
+    function toggleSettingsHighlight() {
+      // ছোট visual cue
+      settingsPanel.style.boxShadow = "0 0 0 1px rgba(34, 197, 94, 0.6)";
+      settingsPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => {
+        settingsPanel.style.boxShadow = "none";
+      }, 900);
+    }
+
+    function applyFontSettings() {
+      const arSize = parseFloat(arabicFontSizeInput.value) || 21;
+      const bnSize = parseFloat(banglaFontSizeInput.value) || 14;
+      const arLH = parseFloat(arabicLineHeightInput.value) || 2.0;
+      const bnLH = parseFloat(banglaLineHeightInput.value) || 1.6;
+
+      document.querySelectorAll(".ayah-text-ar").forEach((el) => {
+        el.style.fontSize = arSize + "px";
+        el.style.lineHeight = arLH.toString();
+      });
+
+      document.querySelectorAll(".ayah-text-bn").forEach((el) => {
+        el.style.fontSize = bnSize + "px";
+        el.style.lineHeight = bnLH.toString();
+      });
+    }
+
+    function getSelectedWriters() {
+      const writers = [];
+      if (writerOsmani.checked) writers.push("osmani");
+      if (writerTawjih.checked) writers.push("tawjih");
+      return writers;
+    }
+
+    // ===== Surah List & Selector =====
+
+    function initSurahSelector() {
+      if (!window.suras || !Array.isArray(window.suras)) return;
+
+      // Dropdown
+      window.suras.forEach((s) => {
+        const opt = document.createElement("option");
+        opt.value = s.number;
+        opt.textContent = `${s.number}. ${s.nameBn}`;
+        surahSelect.appendChild(opt);
+      });
+
+      // Sidebar chips
+      surahList.innerHTML = "";
+      window.suras.forEach((s) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "surah-chip";
+        chip.dataset.number = s.number;
+        chip.innerHTML = `
+          <span class="surah-chip-number">${s.number}</span>
+          <span class="surah-chip-name">${s.nameBn}</span>
+        `;
+        chip.addEventListener("click", () => {
+          surahSelect.value = s.number;
+          onSurahChange();
         });
+        surahList.appendChild(chip);
+      });
+    }
+
+    function highlightCurrentSurahChip(number) {
+      document.querySelectorAll(".surah-chip").forEach((chip) => {
+        chip.classList.toggle("active", String(chip.dataset.number) === String(number));
+      });
+    }
+
+    function onSurahChange() {
+      const value = surahSelect.value;
+      if (!value) {
+        currentSurah = null;
+        currentSurahTitle.textContent = "সূরা নির্বাচন করুন — ১–১১৪ তালিকা থেকে";
+        surahContent.innerHTML = `
+          <div class="info-block">
+            সূরা নির্বাচন করুন। বর্তমানে কোনো সূরা লোড করা নেই।
+          </div>
+        `;
+        highlightCurrentSurahChip(null);
+        return;
       }
 
-      async function selectSura(suraMeta, listItemEl) {
-        if (activeSuraItem) {
-          activeSuraItem.classList.remove("active");
-        }
-        activeSuraItem = listItemEl;
-        activeSuraItem.classList.add("active");
+      const suraMeta = window.suras.find((s) => String(s.number) === String(value));
+      if (!suraMeta) return;
 
-        currentSura = suraMeta;
-        currentSuraData = null;
-        activeWordToken = null;
-        detailSubtitle.textContent = "শব্দে–শব্দে মোড চালু করে কোনো শব্দে tap করুন";
-        detailPlaceholder.style.display = "flex";
-        detailContent.style.display = "none";
-        detailWord.textContent = "";
-        detailMeaning.textContent = "";
-        detailGrammar.textContent = "";
-        detailFooterInfo.textContent = "মোট শব্দ: —";
+      currentSurahTitle.textContent = `${suraMeta.number}. ${suraMeta.nameBn} — ${suraMeta.nameAr}`;
+      highlightCurrentSurahChip(suraMeta.number);
 
-        readerPanelTitle.textContent = `${suraMeta.nameBn} — ${suraMeta.nameAr}`;
-        readerPanelSubtitle.textContent = `সুরা ${suraMeta.number} • ${
-          suraMeta.type === "Makki" ? "মাক্কী" : "মাদানী"
-        } • মোট আয়াত ${suraMeta.ayahCount}`;
-        currentSuraInfo.textContent = `নির্বাচিত: সূরা ${suraMeta.number}`;
+      // Load JSON
+      const fileName = suraMeta.file;
+      fetch(fileName)
+        .then((res) => res.json())
+        .then((data) => {
+          currentSurah = data;
+          renderCurrentSurah();
+          scrollToTop();
+        })
+        .catch((err) => {
+          console.error("Error loading surah JSON:", err);
+          surahContent.innerHTML = `
+            <div class="info-block">
+              <span style="color: ${"var(--danger)"};">⚠️ সূরা ডাটা লোড করতে সমস্যা হয়েছে।</span><br />
+              ফাইল: <code>${fileName}</code> — অনুগ্রহ করে ফাইলের নাম/JSON সিনট্যাক্স চেক করুন।
+            </div>
+          `;
+        });
+    }
 
-        initialPlaceholder.style.display = "none";
-        readerContainer.innerHTML = `<div class="detail-placeholder">লোড হচ্ছে...</div>`;
+    // ===== Render Logic =====
 
-        try {
-          const res = await fetch(suraMeta.file);
-          if (!res.ok) throw new Error("JSON ফাইল পাওয়া যায়নি");
-          const data = await res.json();
-          currentSuraData = data;
-          renderCurrentSura();
-        } catch (err) {
-          console.error(err);
-          readerContainer.innerHTML = `<div class="detail-placeholder" style="color:${"var(--danger)"};">
-              এই সূরার JSON data লোড করা যায়নি। ফাইলের নাম, পাথ ও JSON ফরম্যাট আবার চেক করুন।
-            </div>`;
-        }
+    function renderCurrentSurah() {
+      surahContent.innerHTML = "";
+
+      if (!currentSurah) {
+        surahContent.innerHTML = `
+          <div class="info-block">
+            সূরা নির্বাচন করুন। বর্তমানে কোনো সূরা লোড করা নেই।
+          </div>
+        `;
+        return;
       }
 
-      function renderCurrentSura() {
-        if (!currentSuraData) return;
+      const selectedWriters = getSelectedWriters();
 
-        readerContainer.innerHTML = "";
+      const container = document.createElement("div");
 
-        if (currentSuraData.hasBismillah && currentSuraData.bismillah) {
-          const b = currentSuraData.bismillah;
-          const bism = document.createElement("div");
-          bism.className = "bismillah-block";
+      // Meta block
+      const metaDiv = document.createElement("div");
+      metaDiv.className = "surah-meta";
+      metaDiv.innerHTML = `
+        <div class="surah-meta-main">
+          <div class="name-ar">${currentSurah.nameAr || ""}</div>
+          <div class="name-bn">${currentSurah.nameBn || ""} (${currentSurah.number})</div>
+        </div>
+        <div class="surah-meta-tags">
+          <div class="pill pill-accent">
+            <span class="icon">📍</span>
+            <span>${currentSurah.revelationPlace === "Makki" ? "মাক্কী" : (currentSurah.revelationPlace === "Madani" ? "মাদানী" : "অজানা")}</span>
+          </div>
+          <div class="pill">
+            <span class="icon">🔢</span>
+            <span>${currentSurah.ayahCount || (currentSurah.ayahs ? currentSurah.ayahs.length : "?")} আয়াত</span>
+          </div>
+        </div>
+      `;
+      container.appendChild(metaDiv);
 
-          const bAr = document.createElement("div");
-          bAr.className = "bismillah-ar";
-          bAr.textContent = b.arabic || "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ";
+      // Bismillah
+      if (currentSurah.hasBismillah && currentSurah.bismillah) {
+        const b = currentSurah.bismillah;
+        const bWrap = document.createElement("div");
+        bWrap.className = "bismillah-block";
 
-          bism.appendChild(bAr);
+        const lines = [];
+        if (b.bangla) {
+          lines.push(`<div class="bismillah-bn">${b.bangla}</div>`);
+        }
 
-          const translations = b.translations || {};
-
-          const showOsmani = chkOsmani.checked && translations.osmani;
-          const showTawjih = chkTawjih.checked && translations.tawjih;
-
-          if (currentMode === "simple") {
-            if (showOsmani || showTawjih) {
-              const transWrap = document.createElement("div");
-              transWrap.className = "bismillah-trans";
-
-              if (showOsmani) {
-                const line = document.createElement("div");
-                const lbl = document.createElement("span");
-                lbl.className = "label";
-                lbl.textContent = "তাফসীরে ওসমানী:";
-                const txt = document.createElement("span");
-                txt.textContent = " " + translations.osmani;
-                line.appendChild(lbl);
-                line.appendChild(txt);
-                transWrap.appendChild(line);
-              }
-
-              if (showTawjih) {
-                const line = document.createElement("div");
-                const lbl = document.createElement("span");
-                lbl.className = "label";
-                lbl.textContent = "তাওযীহুল কুরআন:";
-                const txt = document.createElement("span");
-                txt.textContent = " " + translations.tawjih;
-                line.appendChild(lbl);
-                line.appendChild(txt);
-                transWrap.appendChild(line);
-              }
-
-              bism.appendChild(transWrap);
+        let transHtml = "";
+        if (currentMode !== "arabic" && b.translations) {
+          if (currentMode === "translation" && selectedWriters.length > 0) {
+            transHtml += `<div class="bismillah-trans">`;
+            if (selectedWriters.includes("osmani") && b.translations.osmani) {
+              transHtml += `<div><span class="ayah-trans-label">[ওসমানী]</span>${b.translations.osmani}</div>`;
             }
+            if (selectedWriters.includes("tawjih") && b.translations.tawjih) {
+              transHtml += `<div><span class="ayah-trans-label">[তাওযীহ]</span>${b.translations.tawjih}</div>`;
+            }
+            transHtml += `</div>`;
           }
-
-          readerContainer.appendChild(bism);
         }
 
-        const ayahs = currentSuraData.ayahs || [];
-        let totalWordCount = 0;
+        bWrap.innerHTML = `
+          <div class="bismillah-ar">${b.arabic || ""}</div>
+          ${lines.join("")}
+          ${transHtml}
+        `;
 
-        ayahs.forEach((ayah) => {
-          const block = document.createElement("div");
-          block.className = "ayah-block";
+        container.appendChild(bWrap);
+      }
 
-          const metaLine = document.createElement("div");
-          metaLine.className = "ayah-meta-line";
-          metaLine.innerHTML = `<span>আয়াত ${ayah.ayahNumber}</span>`;
-          block.appendChild(metaLine);
+      // Ayahs
+      if (!currentSurah.ayahs || !Array.isArray(currentSurah.ayahs)) {
+        const info = document.createElement("div");
+        info.className = "info-block";
+        info.innerHTML = `এই সূরার জন্য ayahs array পাওয়া যায়নি। JSON data চেক করুন।`;
+        container.appendChild(info);
+      } else {
+        currentSurah.ayahs.forEach((ayah) => {
+          const card = document.createElement("div");
+          card.className = "ayah-card";
 
+          // Header
+          const header = document.createElement("div");
+          header.className = "ayah-header";
+          header.innerHTML = `
+            <div class="ayah-number">${ayah.ayahNumber}</div>
+            <div class="ayah-meta">
+              <span>আয়াত ${ayah.ayahNumber}</span>
+            </div>
+          `;
+          card.appendChild(header);
+
+          // Arabic
           const arDiv = document.createElement("div");
-          arDiv.className = "ayah-arabic";
+          arDiv.className = "ayah-text-ar";
 
-          const words = ayah.words || [];
-          totalWordCount += words.length;
-
-          if (currentMode === "word" && words.length > 0) {
-            words.forEach((w, idx) => {
+          if (currentMode === "word" && Array.isArray(ayah.words) && ayah.words.length > 0) {
+            ayah.words.forEach((w, idx) => {
               const span = document.createElement("span");
               span.className = "word-token";
               span.textContent = w.text || "";
-              span.addEventListener("click", () => onWordClick(span, ayah, w, idx));
+              span.dataset.ayah = ayah.ayahNumber;
+              span.dataset.index = idx;
+
+              span.addEventListener("click", () => {
+                document.querySelectorAll(".word-token").forEach((t) => t.classList.remove("active"));
+                span.classList.add("active");
+                openWordModal(ayah, w);
+              });
+
               arDiv.appendChild(span);
-              arDiv.appendChild(document.createTextNode(" "));
             });
           } else {
             arDiv.textContent = ayah.arabic || "";
           }
 
-          block.appendChild(arDiv);
+          card.appendChild(arDiv);
 
-          if (currentMode === "simple") {
-            const trans = ayah.translations || {};
-            const showOsmani = chkOsmani.checked && trans.osmani;
-            const showTawjih = chkTawjih.checked && trans.tawjih;
-
-            if (showOsmani || showTawjih) {
-              const transBlock = document.createElement("div");
-              transBlock.className = "ayah-translation-block";
-
-              if (showOsmani) {
-                const line = document.createElement("div");
-                line.className = "ayah-translation-line";
-                line.innerHTML = `<span class="ayah-translation-label">তাফসীরে ওসমানী:</span>${trans.osmani}`;
-                transBlock.appendChild(line);
-              }
-
-              if (showTawjih) {
-                const line = document.createElement("div");
-                line.className = "ayah-translation-line";
-                line.innerHTML = `<span class="ayah-translation-label">তাওযীহুল কুরআন:</span>${trans.tawjih}`;
-                transBlock.appendChild(line);
-              }
-
-              block.appendChild(transBlock);
-            }
+          // Bangla (main ayah meaning)
+          if (currentMode !== "arabic" && ayah.bangla) {
+            const bnDiv = document.createElement("div");
+            bnDiv.className = "ayah-text-bn";
+            bnDiv.textContent = ayah.bangla;
+            card.appendChild(bnDiv);
           }
 
-          readerContainer.appendChild(block);
+          // Translations by writers (only in translation mode)
+          if (currentMode === "translation" && ayah.translations && selectedWriters.length > 0) {
+            const trDiv = document.createElement("div");
+            trDiv.className = "ayah-translations";
+
+            if (selectedWriters.includes("osmani") && ayah.translations.osmani) {
+              const line = document.createElement("div");
+              line.innerHTML = `<span class="ayah-trans-label">[ওসমানী]</span>${ayah.translations.osmani}`;
+              trDiv.appendChild(line);
+            }
+
+            if (selectedWriters.includes("tawjih") && ayah.translations.tawjih) {
+              const line = document.createElement("div");
+              line.innerHTML = `<span class="ayah-trans-label">[তাওযীহ]</span>${ayah.translations.tawjih}`;
+              trDiv.appendChild(line);
+            }
+
+            card.appendChild(trDiv);
+          }
+
+          container.appendChild(card);
         });
-
-        detailFooterInfo.textContent = `মোট শব্দ: ${
-          totalWordCount > 0 ? totalWordCount : "—"
-        }`;
-
-        applyFontSizes();
       }
 
-      function onWordClick(span, ayah, word, index) {
-        if (activeWordToken) {
-          activeWordToken.classList.remove("active");
-        }
-        activeWordToken = span;
-        span.classList.add("active");
+      surahContent.appendChild(container);
 
-        const meaningText = word.meaningBn || "বাংলা অর্থ পাওয়া যায়নি।";
-        const grammarText = word.notes || "এই শব্দের জন্য ব্যাকরণ নোট এখনো যোগ করা হয়নি।";
+      // Apply font settings every render
+      applyFontSettings();
+    }
 
-        detailSubtitle.textContent = `আয়াত ${ayah.ayahNumber} — শব্দ ${index + 1}`;
-        detailPlaceholder.style.display = "none";
-        detailContent.style.display = "block";
-        detailWord.textContent = word.text || "";
-        detailMeaning.textContent = meaningText;
-        detailGrammar.textContent = grammarText;
-        detailGrammar.style.display = grammarVisible ? "block" : "none";
+    // ===== Word Modal (center popup) =====
 
-        const isMobile = window.innerWidth <= 900;
-        if (isMobile) {
-          wordModalTitle.textContent = `আয়াত ${ayah.ayahNumber} — শব্দ ${index + 1}`;
-          wordModalWord.textContent = word.text || "";
-          wordModalMeaning.textContent = meaningText;
-          wordModalGrammar.textContent = grammarText;
-          wordModalBackdrop.style.display = "flex";
-        }
-      }
+    function openWordModal(ayah, word) {
+      wordModalArabic.textContent = word.text || "";
+      wordModalMeaning.textContent = word.meaningBn || "—";
+      const notesText = word.notes || "";
+      wordModalNotes.textContent = notesText || "—";
 
-      wordModalClose.addEventListener("click", () => {
+      const surahName = currentSurah ? currentSurah.nameBn || "" : "";
+      const ayRef = `সূরা ${surahName} — আয়াত ${ayah.ayahNumber}`;
+      wordModalAyahRef.textContent = ayRef;
+
+      wordModalBackdrop.style.display = "flex";
+    }
+
+    wordModalClose.addEventListener("click", () => {
+      wordModalBackdrop.style.display = "none";
+      document.querySelectorAll(".word-token").forEach((t) => t.classList.remove("active"));
+    });
+
+    wordModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === wordModalBackdrop) {
         wordModalBackdrop.style.display = "none";
-      });
-
-      wordModalBackdrop.addEventListener("click", (e) => {
-        if (e.target === wordModalBackdrop) {
-          wordModalBackdrop.style.display = "none";
-        }
-      });
-
-      function setMode(mode) {
-        currentMode = mode;
-        if (mode === "simple") {
-          modeSimpleBtn.classList.add("active");
-          modeWordByWordBtn.classList.remove("active");
-        } else {
-          modeSimpleBtn.classList.remove("active");
-          modeWordByWordBtn.classList.add("active");
-        }
-        if (currentSuraData) {
-          renderCurrentSura();
-        }
+        document.querySelectorAll(".word-token").forEach((t) => t.classList.remove("active"));
       }
+    });
 
-      modeSimpleBtn.addEventListener("click", () => setMode("simple"));
-      modeWordByWordBtn.addEventListener("click", () => setMode("word"));
+    // ===== Event Bindings =====
 
-      chkOsmani.addEventListener("change", () => {
-        if (currentSuraData) renderCurrentSura();
-      });
-      chkTawjih.addEventListener("change", () => {
-        if (currentSuraData) renderCurrentSura();
-      });
+    surahSelect.addEventListener("change", onSurahChange);
 
-      function applyFontSizes() {
-        const allArabicEls = readerContainer.querySelectorAll(
-          ".ayah-arabic, .bismillah-ar"
-        );
-        const allBanglaEls = readerContainer.querySelectorAll(
-          ".ayah-translation-line, .bismillah-trans, .bismillah-bn"
-        );
+    modeWordBtn.addEventListener("click", () => setMode("word"));
+    modeTransBtn.addEventListener("click", () => setMode("translation"));
+    modeArabicBtn.addEventListener("click", () => setMode("arabic"));
 
-        let arSize;
-        if (arabicFontSize === "small") arSize = "1rem";
-        else if (arabicFontSize === "large") arSize = "1.4rem";
-        else arSize = "1.2rem";
+    writerOsmani.addEventListener("change", renderCurrentSurah);
+    writerTawjih.addEventListener("change", renderCurrentSurah);
 
-        allArabicEls.forEach((el) => {
-          el.style.fontSize = arSize;
-        });
+    arabicFontSizeInput.addEventListener("input", applyFontSettings);
+    banglaFontSizeInput.addEventListener("input", applyFontSettings);
+    arabicLineHeightInput.addEventListener("input", applyFontSettings);
+    banglaLineHeightInput.addEventListener("input", applyFontSettings);
 
-        let bnSize;
-        if (banglaFontSize === "small") bnSize = "0.8rem";
-        else if (banglaFontSize === "large") bnSize = "1rem";
-        else bnSize = "0.9rem";
+    scrollTopBtn.addEventListener("click", scrollToTop);
+    openSettingsBtn.addEventListener("click", toggleSettingsHighlight);
 
-        allBanglaEls.forEach((el) => {
-          el.style.fontSize = bnSize;
-        });
+    bottomSurahBtn.addEventListener("click", () => {
+      surahSelect.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    bottomWordBtn.addEventListener("click", () => setMode("word"));
+    bottomTransBtn.addEventListener("click", () => setMode("translation"));
+    bottomSettingsBtn.addEventListener("click", toggleSettingsHighlight);
 
-        detailMeaning.style.fontSize = bnSize;
-        detailGrammar.style.fontSize = "0.82rem";
-      }
-
-      function setArabicFontSize(size) {
-        arabicFontSize = size;
-        [fontArabicSmall, fontArabicMedium, fontArabicLarge].forEach((btn) =>
-          btn.classList.remove("active")
-        );
-        if (size === "small") fontArabicSmall.classList.add("active");
-        else if (size === "large") fontArabicLarge.classList.add("active");
-        else fontArabicMedium.classList.add("active");
-        applyFontSizes();
-      }
-
-      function setBanglaFontSize(size) {
-        banglaFontSize = size;
-        [fontBanglaSmall, fontBanglaMedium, fontBanglaLarge].forEach((btn) =>
-          btn.classList.remove("active")
-        );
-        if (size === "small") fontBanglaSmall.classList.add("active");
-        else if (size === "large") fontBanglaLarge.classList.add("active");
-        else fontBanglaMedium.classList.add("active");
-        applyFontSizes();
-      }
-
-      fontArabicSmall.addEventListener("click", () =>
-        setArabicFontSize("small")
-      );
-      fontArabicMedium.addEventListener("click", () =>
-        setArabicFontSize("medium")
-      );
-      fontArabicLarge.addEventListener("click", () =>
-        setArabicFontSize("large")
-      );
-
-      fontBanglaSmall.addEventListener("click", () =>
-        setBanglaFontSize("small")
-      );
-      fontBanglaMedium.addEventListener("click", () =>
-        setBanglaFontSize("medium")
-      );
-      fontBanglaLarge.addEventListener("click", () =>
-        setBanglaFontSize("large")
-      );
-
-      btnGrammarToggle.addEventListener("click", () => {
-        grammarVisible = !grammarVisible;
-        detailGrammar.style.display = grammarVisible ? "block" : "none";
-        btnGrammarToggle.querySelector("span:nth-child(2)").textContent = grammarVisible
-          ? "ব্যাকরণ নোট লুকাও"
-          : "ব্যাকরণ নোট দেখাও";
-      });
-
-      backHomeLink.addEventListener("click", () => {
-        readerContainer.scrollTo({ top: 0, behavior: "smooth" });
-      });
-
-      buildSuraList();
-    </script>
-  </body>
+    // ===== Init =====
+    document.addEventListener("DOMContentLoaded", () => {
+      initSurahSelector();
+    });
+  </script>
+</body>
 </html>
